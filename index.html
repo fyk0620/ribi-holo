@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ribi Holo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23e8eae6'/%3E%3Crect x='9' y='5' width='14' height='22' fill='none' stroke='%231b2126' stroke-width='2'/%3E%3Crect x='13' y='9' width='6' height='6' fill='%231b2126'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/base.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/cards.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/basic.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/reverse-holo.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/regular-holo.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/cosmos-holo.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/amazing-rare.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/radiant-holo.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/v-regular.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/v-full-art.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/v-max.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/v-star.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/trainer-full-art.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/rainbow-holo.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/rainbow-alt.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/secret-rare.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/trainer-gallery-holo.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/trainer-gallery-v-regular.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/trainer-gallery-v-max.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/trainer-gallery-secret-rare.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/shiny-rare.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/shiny-v.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/shiny-vmax.css">
+  <link rel="stylesheet" data-engine="css" href="css/pokemon-cards-css/cards/swsh-pikachu.css">
+
+  <link rel="stylesheet" href="css/app.css" id="app-css">
+
+  <meta property="og:title" content="Ribi Holo - Quick Preview Your Holo Pokémon Card"/>
+  <meta property="og:image" content=".thumb.png">
+  <meta property="og:description" content="Preview your custom Pokémon cards with holo foil effects. Upload any card and explore 30+ unique foil presets with instant previews!"/>
+  <meta property="og:url" content="your url"/>
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:type" content="website"/> 
+  
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="theme-color" content="#1877F2">
+</head>
+<body>
+
+  <div class="veil" id="veil"></div>
+
+  <main class="frame">
+
+    <aside class="panel">
+
+      <h1 class="mark"><span>Ribi</span><span>Holo</span></h1>
+
+      <section class="group">
+        <div class="slots" id="slots">
+          <div class="slot" data-slot="card">
+            <button class="slot__drop" type="button" aria-label="Card image"><img alt="" draggable="false"></button>
+            <button class="slot__clear" type="button" aria-label="Restore default card"></button>
+            <span class="slot__name">Card</span>
+            <input type="file" accept="image/png,image/jpeg,image/webp,image/*" hidden>
+          </div>
+          <div class="slot" data-slot="mask">
+            <button class="slot__drop" type="button" aria-label="Mask image"><img alt="" draggable="false"></button>
+            <button class="slot__clear" type="button" aria-label="Remove mask"></button>
+            <span class="slot__name">Mask</span>
+            <input type="file" accept="image/png,image/jpeg,image/webp,image/*" hidden>
+          </div>
+          <div class="slot" data-slot="foil">
+            <button class="slot__drop" type="button" aria-label="Foil image"><img alt="" draggable="false"></button>
+            <button class="slot__clear" type="button" aria-label="Remove foil"></button>
+            <span class="slot__name">Foil</span>
+            <input type="file" accept="image/png,image/jpeg,image/webp,image/*" hidden>
+          </div>
+          <div class="slot" data-slot="back">
+            <button class="slot__drop" type="button" aria-label="Card back image"><img alt="" draggable="false"></button>
+            <button class="slot__clear" type="button" aria-label="Restore default card back"></button>
+            <span class="slot__name">Back</span>
+            <input type="file" accept="image/png,image/jpeg,image/webp,image/*" hidden>
+          </div>
+        </div>
+        <div class="slots-foot">
+          <a class="text-btn" href="Card%20Reference.zip" download="Card Reference.zip">Download references</a>
+          <button class="text-btn" id="reset" type="button" hidden>Reset</button>
+        </div>
+      </section>
+
+      <section class="group">
+        <span class="field__label" id="style-label">Holo style</span>
+        <div class="select" id="style">
+          <button class="select__btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="style-label style-value">
+            <span id="style-value"></span>
+          </button>
+          <ul class="select__menu" role="listbox" aria-labelledby="style-label" tabindex="-1" hidden></ul>
+        </div>
+      </section>
+
+      <section class="group">
+        <label class="check">
+          <input type="checkbox" id="auto">
+          <span class="check__box" aria-hidden="true"></span>
+          <span>Auto rotation</span>
+        </label>
+        <div class="range">
+          <label for="amp">Amplitude</label>
+          <output id="amp-out" for="amp"></output>
+          <input type="range" id="amp" min="0" max="25" step="0.5" value="13">
+        </div>
+        <div class="range">
+          <label for="freq">Frequency</label>
+          <output id="freq-out" for="freq"></output>
+          <input type="range" id="freq" min="0.05" max="1" step="0.05" value="0.35">
+        </div>
+      </section>
+
+      <footer class="credit">
+        <p>Hover &amp; holo effects by simeydotme <span>(<a href="https://github.com/simeydotme/pokemon-cards-css" target="_blank" rel="noopener">GitHub</a> • <a href="https://x.com/simeydotme" target="_blank" rel="noopener">@simeydotme</a>)</span></p>
+        <p>Web by Fuyuka Kazehaya <span>(<a href="https://x.com/kz_fuyuka" target="_blank" rel="noopener">@kz_fuyuka</a>)</span></p>
+      </footer>
+
+    </aside>
+
+    <section class="stage" id="stage">
+      <div class="plate" id="plate">
+        <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+        <div id="mount" class="mount"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/math.js"></script>
+  <script src="js/spring.js"></script>
+  <script src="js/holo-card.js"></script>
+  <script src="js/styles.js"></script>
+  <script src="js/defaults.js"></script>
+  <script>if (location.protocol === "file:") document.write('<script src="js/file-masks.js"><\/script>');</script>
+  <script src="js/app.js"></script>
+</body>
+</html>

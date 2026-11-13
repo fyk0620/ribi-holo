@@ -1,0 +1,1 @@
+window.Ribi=window.Ribi||{},function(i){const n=(i,n=3)=>parseFloat(i.toFixed(n));i.round=n,i.clamp=(i,n=0,o=100)=>Math.min(Math.max(i,n),o),i.adjust=(i,o,a,t,d)=>n(t+(d-t)*(i-o)/(a-o))}(window.Ribi);
