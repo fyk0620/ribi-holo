@@ -1,5 +1,6 @@
 # Ribi Holo
-<img src="./thumb.png">
+<img src="./thumb.png" alt="Ribi Holo Thumb" width="600">
+
 Open `index.html` — no build step, no server. To deploy, upload this folder (or the zip) to Cloudflare Pages as static assets.
 
 - `css/pokemon-cards-css/cards/` and `css/pokemon-cards-151/cards/` — the card stylesheets of simeydotme's two projects, unchanged except that texture paths (`/img/...`, CDN links) now point to `img/foils/`.
