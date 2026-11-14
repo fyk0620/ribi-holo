@@ -10,5 +10,5 @@ Link web: [Ribi Holo](https://ribi-holo.pages.dev/)
 
 Uploaded images stay in the browser and disappear when the tab is closed.
 
-Licenses: the card CSS and the interaction logic derive from [simeydotme/pokemon-cards-css](https://github.com/simeydotme/pokemon-cards-css) and [pokemon-cards-151](https://github.com/simeydotme/pokemon-cards-151) (GPL-3.0); see `licenses/`.
+Licenses: the card CSS and the interaction logic derive from [simeydotme/pokemon-cards-css](https://github.com/simeydotme/pokemon-cards-css) and [simeydotme/pokemon-cards-151](https://github.com/simeydotme/pokemon-cards-151) (GPL-3.0); see `licenses/`.
 
