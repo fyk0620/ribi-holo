@@ -34,16 +34,23 @@
   <link rel="stylesheet" href="css/app.css" id="app-css">
 
   <meta property="og:title" content="Ribi Holo - Quick Preview Your Holo Pokémon Card"/>
-  <meta property="og:image" content=".thumb.png">
-  <meta property="og:description" content="Preview your custom Pokémon cards with holo foil effects. Upload any card and explore 30+ unique foil presets with instant previews!"/>
-  <meta property="og:url" content="your url"/>
+  <meta property="og:image" content="https://ribi-holo.pages.dev/thumb.png">
+  <meta property="og:description" content="Preview your custom Pokémon cards with holo foil effects. Upload any card and explore 30+ unique presets with instant previews!"/>
+  <meta property="og:url" content="https://ribi-holo.pages.dev/"/>
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630"/>
   <meta property="og:type" content="website"/> 
   
   <meta name="twitter:card" content="summary_large_image">
 
-  <meta name="theme-color" content="#1877F2">
+  <meta name="theme-color" content="#E8EAE6" id="theme-color">
+  <script>
+    (function () {
+      var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.scheme = dark ? 'dark' : 'light';
+      if (dark) document.getElementById('theme-color').content = '#25282A';
+    })();
+  </script>
 </head>
 <body>
 
@@ -59,7 +66,6 @@
         <div class="slots" id="slots">
           <div class="slot" data-slot="card">
             <button class="slot__drop" type="button" aria-label="Card image"><img alt="" draggable="false"></button>
-            <button class="slot__clear" type="button" aria-label="Restore default card"></button>
             <span class="slot__name">Card</span>
             <input type="file" accept="image/png,image/jpeg,image/webp,image/*" hidden>
           </div>
@@ -77,13 +83,12 @@
           </div>
           <div class="slot" data-slot="back">
             <button class="slot__drop" type="button" aria-label="Card back image"><img alt="" draggable="false"></button>
-            <button class="slot__clear" type="button" aria-label="Restore default card back"></button>
             <span class="slot__name">Back</span>
             <input type="file" accept="image/png,image/jpeg,image/webp,image/*" hidden>
           </div>
         </div>
         <div class="slots-foot">
-          <a class="text-btn" href="Card%20Reference.zip" download="Card Reference.zip">Download references</a>
+          <a class="text-btn" href="Card_Reference.zip" download="Card_Reference.zip">Download references</a>
           <button class="text-btn" id="reset" type="button" hidden>Reset</button>
         </div>
       </section>
@@ -98,26 +103,25 @@
         </div>
       </section>
 
-      <section class="group">
+      <section class="group motion">
+        <div class="theme" role="group" aria-label="Theme">
+          <button type="button" data-theme="light" aria-label="Light" aria-pressed="false">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square" aria-hidden="true"><circle cx="8" cy="8" r="2.6"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"/></svg>
+          </button>
+          <button type="button" data-theme="dark" aria-label="Dark" aria-pressed="false">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="miter" aria-hidden="true"><path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8a5.6 5.6 0 1 0 6.8 6.8z"/></svg>
+          </button>
+          <button type="button" data-theme="system" aria-pressed="true">System</button>
+        </div>
         <label class="check">
           <input type="checkbox" id="auto">
           <span class="check__box" aria-hidden="true"></span>
           <span>Auto rotation</span>
         </label>
-        <div class="range">
-          <label for="amp">Amplitude</label>
-          <output id="amp-out" for="amp"></output>
-          <input type="range" id="amp" min="0" max="25" step="0.5" value="13">
-        </div>
-        <div class="range">
-          <label for="freq">Frequency</label>
-          <output id="freq-out" for="freq"></output>
-          <input type="range" id="freq" min="0.05" max="1" step="0.05" value="0.35">
-        </div>
       </section>
 
       <footer class="credit">
-        <p>Hover &amp; holo effects by simeydotme <span>(<a href="https://github.com/simeydotme/pokemon-cards-css" target="_blank" rel="noopener">GitHub</a> • <a href="https://x.com/simeydotme" target="_blank" rel="noopener">@simeydotme</a>)</span></p>
+        <p>Holo effects by Simon Goellner <span>(<a href="https://github.com/simeydotme/pokemon-cards-css" target="_blank" rel="noopener">GitHub</a> • <a href="https://x.com/simeydotme" target="_blank" rel="noopener">@simeydotme</a>)</span></p>
         <p>Web by Fuyuka Kazehaya <span>(<a href="https://x.com/kz_fuyuka" target="_blank" rel="noopener">@kz_fuyuka</a>)</span></p>
       </footer>
 

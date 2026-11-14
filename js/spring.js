@@ -1,1 +1,123 @@
-window.Ribi=window.Ribi||{},function(n){const e=()=>performance.now(),t=new Set,s=new Set;let o=null,r=!1;function i(){o=null,r=!0;const n=e();t.forEach((e=>{e.callback(n)||(t.delete(e),e.resolve())})),s.forEach((n=>n())),r=!1,t.size&&null===o&&(o=requestAnimationFrame(i))}function l(n,e,t,s){if("number"==typeof t){const o=s-t,r=(t-e)/(n.dt||1/60),i=(r+(n.opts.stiffness*o-n.opts.damping*r)*n.invMass)*n.dt;return Math.abs(i)<n.opts.precision&&Math.abs(o)<n.opts.precision?s:(n.settled=!1,t+i)}if("object"==typeof t){const o={};for(const r in t)o[r]=l(n,e[r],t[r],s[r]);return o}throw new Error("Cannot spring "+typeof t+" values")}n.spring=function(n,s={},r=(()=>{})){const{stiffness:a=.15,damping:f=.8,precision:u=.01}=s;let c,p,d=n,m=n,w=n,b=1,g=0,h=!1;const v={set:function(n,s={}){if(w=n,null==d||s.hard||v.stiffness>=1&&v.damping>=1)return h=!0,c=e(),m=n,d=w,r(d),Promise.resolve();if(s.soft){const n=!0===s.soft?.5:+s.soft;g=1/(60*n),b=0}return p||(c=e(),h=!1,p=function(n){const e={callback:n};return e.promise=new Promise((n=>e.resolve=n)),t.add(e),null===o&&(o=requestAnimationFrame(i)),e}((n=>{if(h)return h=!1,p=null,!1;b=Math.min(b+g,1);const e={invMass:b,opts:v,settled:!0,dt:60*(n-c)/1e3},t=l(e,m,d,w);return c=n,m=d,d=t,r(d),e.settled&&(p=null),!e.settled}))),p.promise},get value(){return d},get target(){return w},stiffness:a,damping:f,precision:u};return v},n.afterFrame=s,n.frameScheduled=()=>r||null!==o}(window.Ribi);
+
+window.Ribi = window.Ribi || {};
+
+(function (R) {
+  const now = () => performance.now();
+
+  
+  const tasks = new Set();
+  const afterFrame = new Set();
+  let rafId = null;
+  let inRun = false;
+
+  function run() {
+    rafId = null;
+    inRun = true;
+    const t = now();
+    tasks.forEach((task) => {
+      if (!task.callback(t)) {
+        tasks.delete(task);
+        task.resolve();
+      }
+    });
+    afterFrame.forEach((fn) => fn());
+    inRun = false;
+    if (tasks.size && rafId === null) rafId = requestAnimationFrame(run);
+  }
+
+  function loop(callback) {
+    const task = { callback };
+    task.promise = new Promise((resolve) => (task.resolve = resolve));
+    tasks.add(task);
+    if (rafId === null) rafId = requestAnimationFrame(run);
+    return task;
+  }
+
+  function tickSpring(ctx, lastValue, currentValue, targetValue) {
+    if (typeof currentValue === 'number') {
+      const delta = targetValue - currentValue;
+      const velocity = (currentValue - lastValue) / (ctx.dt || 1 / 60); 
+      const spring = ctx.opts.stiffness * delta;
+      const damper = ctx.opts.damping * velocity;
+      const acceleration = (spring - damper) * ctx.invMass;
+      const d = (velocity + acceleration) * ctx.dt;
+      if (Math.abs(d) < ctx.opts.precision && Math.abs(delta) < ctx.opts.precision) {
+        return targetValue; 
+      }
+      ctx.settled = false; 
+      return currentValue + d;
+    } else if (typeof currentValue === 'object') {
+      const next = {};
+      for (const k in currentValue) {
+        next[k] = tickSpring(ctx, lastValue[k], currentValue[k], targetValue[k]);
+      }
+      return next;
+    }
+    throw new Error('Cannot spring ' + typeof currentValue + ' values');
+  }
+
+  function spring(initial, opts = {}, onChange = () => {}) {
+    const { stiffness = 0.15, damping = 0.8, precision = 0.01 } = opts;
+    let value = initial;
+    let lastTime;
+    let task;
+    let lastValue = initial;
+    let targetValue = initial;
+    let invMass = 1;
+    let invMassRecoveryRate = 0;
+    let cancelTask = false;
+
+    function set(newValue, o = {}) {
+      targetValue = newValue;
+      if (value == null || o.hard || (api.stiffness >= 1 && api.damping >= 1)) {
+        cancelTask = true; 
+        lastTime = now();
+        lastValue = newValue;
+        value = targetValue;
+        onChange(value);
+        return Promise.resolve();
+      } else if (o.soft) {
+        const rate = o.soft === true ? 0.5 : +o.soft;
+        invMassRecoveryRate = 1 / (rate * 60);
+        invMass = 0; 
+      }
+      if (!task) {
+        lastTime = now();
+        cancelTask = false;
+        task = loop((t) => {
+          if (cancelTask) {
+            cancelTask = false;
+            task = null;
+            return false;
+          }
+          invMass = Math.min(invMass + invMassRecoveryRate, 1);
+          
+          
+          const ctx = { invMass, opts: api, settled: true, dt: Math.min(((t - lastTime) * 60) / 1000, 2) };
+          const next = tickSpring(ctx, lastValue, value, targetValue);
+          lastTime = t;
+          lastValue = value;
+          value = next;
+          onChange(value);
+          if (ctx.settled) task = null;
+          return !ctx.settled;
+        });
+      }
+      return task.promise;
+    }
+
+    const api = {
+      set,
+      get value() { return value; },
+      get target() { return targetValue; },
+      stiffness,
+      damping,
+      precision,
+    };
+    return api;
+  }
+
+  R.spring = spring;
+  R.afterFrame = afterFrame;
+  R.frameScheduled = () => inRun || rafId !== null;
+})(window.Ribi);
