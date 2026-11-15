@@ -72,7 +72,7 @@
   background-size: 
     240% 240%;
   
-  filter: brightness(1) contrast(.75) saturate(1);
+  filter: brightness(.8) contrast(.75) saturate(1);
   mix-blend-mode: overlay;
 
   z-index: 2;
@@ -88,7 +88,7 @@
   background-position: center center;
   background-repeat: repeat;
 
-  filter: brightness(1) contrast(2) saturate(1.2);
+  filter: brightness(.7) contrast(3) saturate(1.2);
   mix-blend-mode: plus-lighter;
 
   -webkit-mask-image: var(--mask);
@@ -166,12 +166,12 @@
 
   background-image: radial-gradient( 
     farthest-corner circle at var(--pointer-x) var(--pointer-y), 
-    hsl(0, 0%, 80%) 10%, 
-    hsl(0, 0%, 50%) 70% 
+    hsl(0, 0%, 68%) 10%, 
+    hsl(0, 0%, 47%) 70% 
     );
 
     mix-blend-mode: multiply;
-    filter: contrast(1.5);
+    filter: contrast(1.4);
 
 }
 
