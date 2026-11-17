@@ -48,6 +48,7 @@
   --pointer-from-center: 0;
   --pointer-from-top: var(--pointer-from-center);
   --pointer-from-left: var(--pointer-from-center);
+  --card-layout-scale: 1; 
 }
 
 :root {
@@ -84,6 +85,13 @@
 
 html {
   background: var(--paper);
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  html {
+    overflow-x: clip;
+  }
 }
 
 html,
@@ -574,7 +582,9 @@ body.is-zoomed .tick {
 }
 
 .mount {
+  position: relative;
   display: grid;
+  aspect-ratio: .718; 
 }
 
 .tick {
@@ -616,6 +626,41 @@ body.is-zoomed .tick {
 }
 
 
+.card.is-sized {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+}
+
+.card.is-sized .card__shine,
+.card.is-sized .card__glare,
+.card.is-sized .card__glare2,
+.card.is-sized .card__glitter {
+  zoom: var(--card-layout-scale);
+}
+
+.card__translater {
+  transform: translate3d(var(--translate-x), var(--translate-y), var(--translate-z, 0.1px)) scale(var(--card-xform-scale, var(--card-scale)));
+}
+
+
+.card__translater,
+.card__rotator {
+  perspective: calc(600px * var(--card-layout-scale));
+}
+
+.card__rotator {
+  box-shadow:
+    0 0 3px -1px transparent,
+    0 0 2px 1px transparent,
+    0 0 5px 0 transparent,
+    0 calc(10px * var(--card-layout-scale)) calc(20px * var(--card-layout-scale)) calc(-5px * var(--card-layout-scale)) black,
+    0 calc(2px * var(--card-layout-scale)) calc(15px * var(--card-layout-scale)) calc(-5px * var(--card-layout-scale)) black,
+    0 0 20px 0 transparent;
+}
+
+
 
 .card__rotator {
   cursor: pointer;
@@ -628,7 +673,13 @@ body.is-zoomed .card.active .card__rotator {
 .card .card__rotator:focus,
 .card.active .card__rotator,
 .card.active .card__rotator:focus {
-  box-shadow: 0 0 3px -1px transparent, 0 0 2px 1px transparent, 0 0 5px 0 transparent, 0 10px 20px -5px black, 0 2px 15px -5px black, 0 0 20px 0 transparent;
+  box-shadow:
+    0 0 3px -1px transparent,
+    0 0 2px 1px transparent,
+    0 0 5px 0 transparent,
+    0 calc(10px * var(--card-layout-scale)) calc(20px * var(--card-layout-scale)) calc(-5px * var(--card-layout-scale)) black,
+    0 calc(2px * var(--card-layout-scale)) calc(15px * var(--card-layout-scale)) calc(-5px * var(--card-layout-scale)) black,
+    0 0 20px 0 transparent;
 }
 
 
