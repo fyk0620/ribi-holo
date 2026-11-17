@@ -7,9 +7,6 @@ window.Ribi = window.Ribi || {};
   const springInteractSettings = { stiffness: 0.066, damping: 0.25 };
   const springPopoverSettings = { stiffness: 0.033, damping: 0.45 };
   
-  
-  const ZOOM_WIDTH = { wide: 630, portrait: 470 };
-  
   const springSpinSettings = { stiffness: 0.012, damping: 0.27 };
 
   
@@ -38,10 +35,6 @@ window.Ribi = window.Ribi || {};
 
       this.hover = false;
       this.active = false;
-      this.layoutScale = 1; 
-      this.zoomTarget = 1; 
-      this.canZoom = !!(window.CSS && CSS.supports && CSS.supports('zoom', '2')); 
-
       this.dirty = false;
       this.settleTimer = null;
       this.pending = null;
@@ -62,8 +55,6 @@ window.Ribi = window.Ribi || {};
 
       this.build();
       this.bind();
-      this.updateLayout();
-      if (window.ResizeObserver) new ResizeObserver(() => this.updateLayout()).observe(this.mount);
       R.afterFrame.add(() => this.flushIfDirty());
       this.flush();
     }
@@ -114,7 +105,7 @@ window.Ribi = window.Ribi || {};
       this.rotator.addEventListener('pointermove', (e) => this.interact(e));
       this.rotator.addEventListener('pointerleave', () => this.leave());
       this.rotator.addEventListener('click', () => this.toggle());
-      window.addEventListener('resize', () => this.updateLayout());
+      window.addEventListener('resize', () => { if (this.active) this.reposition(); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && this.active) this.deactivate(); });
       document.addEventListener('visibilitychange', () => { this.lastAutoT = 0; });
     }
@@ -202,7 +193,6 @@ window.Ribi = window.Ribi || {};
       set('--background-x', `${is151 ? clamp(bg.x) : bg.x}%`);
       set('--background-y', `${is151 ? clamp(bg.y) : bg.y}%`);
       set('--card-scale', sc);
-      set('--card-xform-scale', sc / this.layoutScale);
       set('--translate-x', `${tr.x}px`);
       set('--translate-y', `${tr.y}px`);
       if (is151) this.root.classList.toggle('is-scaled', sc > 1);
@@ -372,7 +362,7 @@ window.Ribi = window.Ribi || {};
     }
 
     setCenter() {
-      const rect = this.mount.getBoundingClientRect(); 
+      const rect = this.root.getBoundingClientRect(); 
       const view = document.documentElement;
       this.springTranslate.set({
         x: round(view.clientWidth / 2 - rect.x - rect.width / 2),
@@ -380,42 +370,27 @@ window.Ribi = window.Ribi || {};
       });
     }
 
-    
-    slotWidth() {
-      return this.mount.clientWidth;
-    }
-
-    
     zoomScale() {
-      const w = this.slotWidth();
-      const h = this.mount.clientHeight;
-      if (!w || !h) return 1;
-      const target = (window.matchMedia('(max-width: 880px)').matches ? ZOOM_WIDTH.portrait : ZOOM_WIDTH.wide) / w;
-      
-      return Math.max(1, Math.min(target, (window.innerWidth * 0.9) / w, (window.innerHeight * 0.9) / h));
-    }
-
-    
-    updateLayout() {
-      const target = this.zoomScale();
-      this.zoomTarget = target;
-      const scale = this.canZoom ? target : 1;
-      this.layoutScale = scale;
-      this.root.style.setProperty('--card-layout-scale', scale);
-      this.root.classList.toggle('is-sized', scale !== 1);
-      this.root.style.width = scale === 1 ? '' : `${this.slotWidth() * scale}px`;
-      if (this.active) {
-        this.setCenter();
-        this.springScale.set(target);
-      }
-      this.markDirty();
+      const w = this.root.offsetWidth;
+      const h = this.root.offsetHeight;
+      return Math.min((window.innerWidth / w) * 0.9, (window.innerHeight / h) * 0.9, 1.75);
     }
 
     popover(spin) {
+      if (spin) {
+        
+        this.springRotateDelta.stiffness = springSpinSettings.stiffness;
+        this.springRotateDelta.damping = springSpinSettings.damping;
+        this.springRotateDelta.set({ x: 360, y: 0 });
+      }
       this.setCenter();
-      if (spin) this.springRotateDelta.set({ x: 360, y: 0 });
-      this.springScale.set(this.zoomTarget);
-      this.settle(spin ? 1000 : 100);
+      this.springScale.set(this.zoomScale());
+      this.settle(spin ? 1200 : 100);
+    }
+
+    reposition() {
+      clearTimeout(this.repositionTimer);
+      this.repositionTimer = setTimeout(() => { if (this.active) this.popover(false); }, 150);
     }
 
     retreat() {

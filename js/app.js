@@ -20,14 +20,10 @@
   };
 
   
-  
-  const defaultFoilUrl = window.RIBI_FILE_FOIL ? dataUrlToBlobUrl(window.RIBI_FILE_FOIL) : abs(DEFAULT_FILES.foil);
-
-  
   const slots = {
     card: { url: abs(DEFAULT_FILES.card), thumb: abs(DEFAULT_FILES.card), custom: false, blob: null },
     mask: { url: null, maskUrl: null, thumb: abs(DEFAULT_FILES.mask), custom: false, blob: null },
-    foil: { url: defaultFoilUrl, thumb: abs(DEFAULT_FILES.foil), custom: false, blob: null },
+    foil: { url: abs(DEFAULT_FILES.foil), thumb: abs(DEFAULT_FILES.foil), custom: false, blob: null },
     back: { url: abs(DEFAULT_FILES.back), thumb: abs(DEFAULT_FILES.back), custom: false, blob: null },
   };
 
@@ -161,7 +157,6 @@
       s.custom = false;
       s.thumb = abs(DEFAULT_FILES[name]);
       if (name === 'mask') { releaseMask(s); s.maskUrl = await defaultMaskReady; }
-      else if (name === 'foil') s.url = defaultFoilUrl;
       else s.url = s.thumb;
     }
     paintTiles();
