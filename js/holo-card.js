@@ -428,11 +428,11 @@ window.Ribi = window.Ribi || {};
     retreat() {
       this.springRotateDelta.stiffness = springPopoverSettings.stiffness;
       this.springRotateDelta.damping = springPopoverSettings.damping;
-      Promise.all([
-        this.springScale.set(1, { soft: true }),
-        this.springTranslate.set({ x: 0, y: 0 }, { soft: true }),
-        this.springRotateDelta.set({ x: 0, y: 0 }, { soft: true }),
-      ])
+      
+      if (this.turn) this.endTurn(this.turn.token);
+      this.springScale.set(1, { soft: true });
+      this.springTranslate.set({ x: 0, y: 0 }, { soft: true });
+      this.springRotateDelta.set({ x: 0, y: 0 }, { soft: true });
       this.settle(100);
     }
 
