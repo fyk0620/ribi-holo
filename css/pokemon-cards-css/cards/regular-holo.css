@@ -19,7 +19,6 @@
 
 
 
-
 /*
 
   SHINE LAYERS
@@ -143,7 +142,7 @@
 .card[data-rarity="rare holo"] .card__glare {
 
   opacity: calc( var(--card-opacity) * .8 );
-  filter: brightness(0.8) contrast(1.5);
+  filter: brightness(0.5);
   mix-blend-mode: overlay;
 
 }
